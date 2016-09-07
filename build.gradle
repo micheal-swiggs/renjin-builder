@@ -9,6 +9,9 @@ description = """"""
 sourceCompatibility = 1.5
 targetCompatibility = 1.5
 
+def rpkg = "rpkg"
+def ren = "ren"
+def renpkg = "ren/rpkg"
 
 repositories
 {
@@ -23,24 +26,24 @@ dependencies {
 
 task cleanall << {
     
-    println("rm NAMESPACE".execute().text)
-    println("rm -rf rpkg".execute().text)
-    println("rm pom.xml".execute().text)
+    println("rm $ren/NAMESPACE".execute().text)
+    println("rm -rf ${renpkg}".execute().text)
+    println("rm $ren/pom.xml".execute().text)
 }
 
 task ship << {
 
-    println ("Rscript manage_lib.R install".execute().text)
-    println ("mvn clean package install".execute().text)
+    println ("Rscript manage_lib.R $ren install".execute().text)
+    println ("mvn -f $ren/pom.xml clean package install".execute().text)
     println ("\n===== INCLUDE WITH =====\n")
     println ("compile('${project.group}:${project.name}:${project.version}')\n")
 }
 
 task newrpkg << {
 
-    new File("rpkg").mkdirs()
-    println ("Rscript manage_lib.R setup ${project.name} ${project.version}".execute().text)
-    println ("ln -s rpkg/NAMESPACE NAMESPACE".execute().text)
+    new File("$renpkg").mkdirs()
+    println ("Rscript manage_lib.R $ren setup ${project.name} ${project.version}".execute().text)
+    println ("ln -s $rpkg/NAMESPACE $ren/NAMESPACE".execute().text)
 }
 
 task genpom << {
@@ -52,7 +55,7 @@ task genpom << {
         {
             updatedContent = updatedContent.replaceAll(it[0], it[1])
         }
-        new File("pom.xml").write(updatedContent, 'UTF-8')
+        new File("$ren/pom.xml").write(updatedContent, 'UTF-8')
     }
 
     doPom([

@@ -9,7 +9,10 @@ In order to create a new package run :
 
 Underneath this will generate the a `pom.xml` and the folder `rpkg` that will have the following structure:
 
-    rpkg/
+    ren/
+      pom.xml
+      NAMESPACE <-- symlink
+      rpkg/
         DESCRIPTION
         NAMESPACE
         R/ <-- Home for R sources
