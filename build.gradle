@@ -1,0 +1,62 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'org.renjin.cran'
+version = '0.0.1'
+
+description = """"""
+
+sourceCompatibility = 1.5
+targetCompatibility = 1.5
+
+
+repositories
+{
+     maven { url "http://nexus.bedatadriven.com/content/groups/public/" }
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+
+dependencies {
+
+}
+
+task cleanall << {
+    
+    println("rm NAMESPACE".execute().text)
+    println("rm -rf rpkg".execute().text)
+    println("rm pom.xml".execute().text)
+}
+
+task ship << {
+
+    println ("Rscript manage_lib.R install".execute().text)
+    println ("mvn clean package install".execute().text)
+    println ("\n===== INCLUDE WITH =====\n")
+    println ("compile('${project.group}:${project.name}:${project.version}')\n")
+}
+
+task newrpkg << {
+
+    new File("rpkg").mkdirs()
+    println ("Rscript manage_lib.R setup ${project.name} ${project.version}".execute().text)
+    println ("ln -s rpkg/NAMESPACE NAMESPACE".execute().text)
+}
+
+task genpom << {
+
+    def doPom = { strChanges ->
+        def basePom = "base_pom.xml"
+        def updatedContent = new File(basePom).getText('UTF-8')
+        strChanges.each
+        {
+            updatedContent = updatedContent.replaceAll(it[0], it[1])
+        }
+        new File("pom.xml").write(updatedContent, 'UTF-8')
+    }
+
+    doPom([
+        ["PACKAGE_NAME", project.name],
+        ["PACKAGE_VERSION", project.version]
+    ])
+}
