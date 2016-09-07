@@ -24,17 +24,16 @@ dependencies {
 
 }
 
-task cleanall << {
-    
-    println("rm $ren/NAMESPACE".execute().text)
-    println("rm -rf ${renpkg}".execute().text)
-    println("rm $ren/pom.xml".execute().text)
+task destroy << {
+    println("rm -rf ${ren}".execute().text)
 }
 
 task ship << {
 
     println ("Rscript manage_lib.R $ren install".execute().text)
+    println ("ln -s $rpkg/NAMESPACE $ren/NAMESPACE".execute().text)
     println ("mvn -f $ren/pom.xml clean package install".execute().text)
+    println ("rm $ren/NAMESPACE".execute().text)
     println ("\n===== INCLUDE WITH =====\n")
     println ("compile('${project.group}:${project.name}:${project.version}')\n")
 }
@@ -43,7 +42,6 @@ task newrpkg << {
 
     new File("$renpkg").mkdirs()
     println ("Rscript manage_lib.R $ren setup ${project.name} ${project.version}".execute().text)
-    println ("ln -s $rpkg/NAMESPACE $ren/NAMESPACE".execute().text)
 }
 
 task genpom << {

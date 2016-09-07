@@ -5,13 +5,12 @@
 
 In order to create a new package run :
 
-    gradle -q genpom newrpkg
+    gradle -q newrpkg genpom
 
-Underneath this will generate the a `pom.xml` and the folder `rpkg` that will have the following structure:
+Underneath this will generate the a `pom.xml` and the folder `ren/` that will have the following structure:
 
     ren/
       pom.xml
-      NAMESPACE <-- symlink
       rpkg/
         DESCRIPTION
         NAMESPACE
@@ -29,7 +28,7 @@ This will install to both the local maven repository and to the GNU R package di
 
 The following command will remove all generated folders & files (dangerous!):
 
-    gradle -q cleanall
+    gradle -q destroy
 
 ## Problems
 
