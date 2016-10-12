@@ -46,7 +46,7 @@
               <goal>namespace-compile</goal>
             </goals>
             <configuration>
-              <sourceDirectory>${basedir}/renjinplugin/R</sourceDirectory>
+              <sourceDirectory>${basedir}/rpkg/R</sourceDirectory>
             </configuration>
           </execution>
           <execution>
